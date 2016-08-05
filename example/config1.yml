@@ -1,0 +1,5 @@
+foo:
+  bar: 
+    from_yaml: '5'
+  baz:
+    boz: abcd
