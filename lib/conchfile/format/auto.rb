@@ -5,7 +5,10 @@ require 'mime-types'
 module Conchfile
   class Format
     class Auto < self
+      attr_accessor :default
+
       def call content, env
+        @debug = true
         meta_data = content.meta_data
         format, mt = format_for_meta_data(meta_data)
         logger.debug { "Determined Format #{format} #{mt} for #{meta_data.inspect}" } if format

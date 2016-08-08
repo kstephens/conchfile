@@ -8,9 +8,7 @@ module Conchfile
                                   'text/x-yaml', 'x-suffix/yaml', 'x-suffix/yml')
 
       def call content, env
-        data = ::YAML.load(content)
-        Deep.deep_symbolize!(data) if symbolize != false
-        data
+        ::YAML.load(content)
       end
     end
   end

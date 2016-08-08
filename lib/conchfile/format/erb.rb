@@ -7,7 +7,7 @@ module Conchfile
     class Erb < self
       Auto.register_for_mime_type(self, 'application-x/erb', 'x-suffix/erb')
 
-      attr_accessor :erb, :format
+      attr_accessor :erb
 
       def call content, env
         WithMetaData[content]
@@ -15,10 +15,6 @@ module Conchfile
           content = expand_erb(content, env)
         end
         format.call(content, env)
-      end
-
-      def format
-        @format || Auto.new
       end
 
       def allow_erb?

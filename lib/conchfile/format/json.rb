@@ -7,10 +7,8 @@ module Conchfile
       Auto.register_for_mime_type(self, 'application/json', 'x-suffix/json')
 
       def call content, env
-        content = content.gsub(%{^\s*//[^\n]*}, '')
-        data = ::JSON.parse(content)
-        Deep.deep_symbolize!(data) if symbolize != false
-        data
+        content = content.gsub(%{^\s*//[^\n]*}, '') # ADHOC // comments.
+        ::JSON.parse(content)
       end
     end
   end

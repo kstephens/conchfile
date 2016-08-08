@@ -1,6 +1,3 @@
-require 'conchfile/lazy_load'
-require 'conchfile/deep'
-require 'thread'
 
 module Conchfile
   module HashLike
@@ -14,23 +11,43 @@ module Conchfile
     attr_accessor :name, :transport, :format
 
     def format
-      @format || Format::Auto.new
+      @format || Format::Symbolize.new(format: Format::Auto.new)
     end
 
     def call env
-      content = transport.call(env)
+      @debug = true
+      content = fetch(env)
       return WithMetaData[{ }, source: self, atime: Time.now] if content.nil?
+      parse(content, env)
+    end
+
+    def fetch env
+      content = nil
+      begin
+        content = transport.call(env)
+      rescue => exc
+        exc = Error.new("#{self.class} : in #{transport.inspect}: #{exc.inspect}")
+        logger.error exc
+        raise exc, exc.message, $!.backtrace
+      end
+
+      return nil if content.nil?
+
       logger.debug { "#{self.class} : Fetched content #{content.meta_data.inspect} from #{transport.inspect}" }
 
       content.meta_data.source ||= self
 
-      format = self.format
+      ap(class:    self.class,
+         format:   format.class,
+         content:  [ content.class, content.meta_data ]) if @debug
 
-      ap(class: self.class,
-         format: format.class,
-         content: [ content.class, content.meta_data ]) if @debug
+      content
+    end
 
+    def parse content, env
       data = nil
+
+      format = self.format
       begin
         data = format.call(content, env)
       rescue => exc
@@ -41,9 +58,9 @@ module Conchfile
 
       WithMetaData[data]
 
-      ap(class: self.class,
-         format: format.class,
-         data: [ data.class, data.meta_data ]) if @debug
+      ap(class:   self.class,
+         format:  format.class,
+         data:    [ data.class, data.meta_data ]) if @debug
 
       data
     end

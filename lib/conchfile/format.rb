@@ -5,10 +5,14 @@ module Conchfile
   class Format
     class Error < Conchfile::Error; end
     include Initialize, Logger
-    attr_accessor :default, :symbolize
+    attr_accessor :format
 
     def call data, env = nil
       data
+    end
+
+    def format
+      @format || Symbolize.new(format: Auto.new)
     end
 
     def inspect
@@ -16,7 +20,7 @@ module Conchfile
     end
 
     def inspect_inner
-      @default && @default.inspect
+      @format && @format.inspect
     end
   end
 end
