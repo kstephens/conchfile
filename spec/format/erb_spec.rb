@@ -1,10 +1,10 @@
 require 'spec_helper'
 require 'conchfile/format/erb'
 
-module Conchfile
-  describe Format do
+module Conchfile; class Format
+  describe Erb do
     subject do
-      Format::Erb.new(opts.merge(format: Format.new))
+      Erb.new(opts.merge(format: Format.new))
     end
     let(:opts) { { } }
     let(:env) { { } }
@@ -33,4 +33,4 @@ module Conchfile
       end
     end
   end
-end
+end; end

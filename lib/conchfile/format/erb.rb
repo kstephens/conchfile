@@ -1,4 +1,4 @@
-require 'conchfile/initialize'
+require 'conchfile/format'
 require 'conchfile/meta_data'
 require 'erb'
 
