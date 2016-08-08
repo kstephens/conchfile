@@ -3,3 +3,5 @@ require 'conchfile'
 require 'awesome_print'
 require 'pry-debugger'
 
+require 'stringio'
+Conchfile::Logger.logger = ::Logger.new(StringIO.new(''))

@@ -8,7 +8,6 @@ module Conchfile
       attr_accessor :default
 
       def call content, env
-        @debug = true
         meta_data = content.meta_data
         format, mt = format_for_meta_data(meta_data)
         logger.debug { "Determined Format #{format} #{mt} for #{meta_data.inspect}" } if format
@@ -54,7 +53,7 @@ module Conchfile
         # Try alt or uri suffix.
         unless f_mt
           u = meta_data.uri_alt || meta_data.uri
-          f_mt = format_for_mime_type(mt = "x-suffix/#{u.suffix}")
+          f_mt = format_for_mime_type(mt = "x-suffix/#{u.suffix}") if u
         end
         # Try explict mime-type or default to text/plain.
         unless f_mt

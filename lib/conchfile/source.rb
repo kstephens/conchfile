@@ -15,7 +15,6 @@ module Conchfile
     end
 
     def call env
-      @debug = true
       content = fetch(env)
       return WithMetaData[{ }, source: self, atime: Time.now] if content.nil?
       parse(content, env)
@@ -33,6 +32,7 @@ module Conchfile
 
       return nil if content.nil?
 
+      WithMetaData[content]
       logger.debug { "#{self.class} : Fetched content #{content.meta_data.inspect} from #{transport.inspect}" }
 
       content.meta_data.source ||= self
