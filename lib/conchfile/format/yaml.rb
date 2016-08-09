@@ -13,9 +13,8 @@ module Conchfile
 
       def inverse
         lambda do | data, env |
-          data = WithMetaData.without(data)
-          binding.pry
-          ::YAML.dump(data)
+          data = WithMetaData.remove(data)
+          ::YAML.dump(data) # Is there an option to ivars?
         end
       end
     end

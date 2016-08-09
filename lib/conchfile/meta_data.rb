@@ -24,13 +24,6 @@ module Conchfile
 
     def inspect_ivars ; INSPECT_IVARS ; end
     INSPECT_IVARS = [ :uri, :uri_alt, :mime_type, :atime, :mtime ].freeze
-
-    def self.without data
-      f = lambda do | x |
-        x.dup rescue nil or x
-      end
-      Deep.deep_visit(data, f)
-    end
   end
 
   module WithMetaData
@@ -43,6 +36,20 @@ module Conchfile
       data
     rescue
       data
+    end
+
+    def self.remove data
+      f = lambda do | x |
+        begin
+          if WithMetaData === x
+            x = x.dup
+            x.remove_instance_variable(:'@meta_data')
+          end
+        rescue
+        end
+        x
+      end
+      Deep.deep_visit(data, f)
     end
 
   end

@@ -22,7 +22,7 @@ module Conchfile
     writer = Source::Writer
       .new(name: "writer",
            source: layer,
-           transport: Transport.new(uri: "http://localhost:3333/tmp/writer.json"))
+           transport: Transport.new(uri: "http://localhost:3333/tmp/writer.yaml"))
 
     root = Root.new(name: 'root', source: writer)
 
