@@ -7,7 +7,7 @@ module Conchfile
   class Source
     class Error < Conchfile::Error; end
 
-    include Initialize, Inspect, Logger, LazyLoad
+    include Initialize, Inspect, Logger, LoadState
     attr_accessor :name, :transport, :format
 
     def initialize *args

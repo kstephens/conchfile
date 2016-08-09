@@ -1,8 +1,8 @@
 require 'thread'
 
 module Conchfile
-  module LazyLoad
-    attr_accessor :load_state
+  module LoadState
+    attr_accessor :load_state, :should_unload
 
     def initialize_load
       @load_state_mutex = Mutex.new
@@ -22,6 +22,7 @@ module Conchfile
               send(:_load!, *args)
             end
             @load_state = :loaded
+            @should_unload = false
           rescue
             @load_state = :failed
             raise
@@ -38,6 +39,18 @@ module Conchfile
     def loaded?
       @load_state == :loading or @load_state == :loaded
     end
+
+    def should_unload!
+      @load_state_mutex.synchronize do
+        case @load_state
+        when :loading
+        when :loaded
+          _should_unload! if respond_to?(:_should_unload!)
+          @should_unload = true
+        end
+      end
+    end
+    alias :should_unload? :should_unload
 
     def unload!
       @load_state_mutex.synchronize do

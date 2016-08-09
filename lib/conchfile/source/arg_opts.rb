@@ -1,4 +1,3 @@
-require 'conchfile/lazy_load'
 require 'conchfile/source'
 
 module Conchfile
