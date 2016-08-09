@@ -5,7 +5,7 @@ require 'erb'
 module Conchfile
   class Format
     class Erb < self
-      Auto.register_for_mime_type(self, 'application-x/erb', 'x-suffix/erb')
+      MimeTypes.register(self, 'application-x/erb', 'x-suffix/erb')
 
       attr_accessor :erb
 
@@ -43,7 +43,7 @@ module Conchfile
 
         result = erb.result(binding)
 
-        # Remove .erb suffix to allow Auto to figure out mime-type from suffix.
+        # Remove .erb suffix to allow Auto to determine mime-type from suffix.
         if erb_suffix?(content)
           meta_data = meta_data.dup
           meta_data.mime_type = nil
