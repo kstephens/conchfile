@@ -4,6 +4,10 @@ module Conchfile
   module LazyLoad
     attr_accessor :load_state
 
+    def initialize_load
+      @load_state_mutex = Mutex.new
+    end
+
     def load! *args
       @load_state_mutex.synchronize do
         logger.debug { "#{self.class} load! #{@load_state.inspect}" }
@@ -29,6 +33,10 @@ module Conchfile
         end
       end unless @load_state == :loaded ||  @load_state == :loading
       self
+    end
+
+    def loaded?
+      @load_state == :loading or @load_state == :loaded
     end
 
     def unload!

@@ -14,7 +14,7 @@ module Conchfile
     attr_accessor :name, :source
 
     def initialize *args
-      @load_state_mutex = Mutex.new
+      initialize_load
       @data_mutex = Mutex.new
       super
     end
@@ -69,20 +69,20 @@ module Conchfile
     end
 
     def check_load! env = nil
-      load!(env) unless @load_state == :loaded || @load_state == :loading
+      load!(env) unless loaded?
       self
     end
 
-    def _load! *args
+    def _load! env = nil
       synchronize do
-        data = source.call(args.first || @data || { })
-        # Deep.deep_freeze!(data)
+        data = source.call(env || @data || { })
         @data = data
       end
       @data
     end
 
     def _unload!
+      source.unload!
     end
 
     ###########################

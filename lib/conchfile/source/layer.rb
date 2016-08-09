@@ -12,7 +12,6 @@ module Conchfile
       end
 
       def << layer
-        @data = nil
         @layers << layer
         self
       end
@@ -42,8 +41,16 @@ module Conchfile
         result
       end
 
-      def inspect_inner
-        layers.inspect
+      def _load!
+        layers.each(&:load!)
+      end
+
+      def _unload!
+        layers.each(&:unload!)
+      end
+
+      def inspect_ivars
+        [ :name , :layers ]
       end
     end
   end

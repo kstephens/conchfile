@@ -10,6 +10,11 @@ module Conchfile
     include Initialize, Inspect, Logger, LazyLoad
     attr_accessor :name, :transport, :format
 
+    def initialize *args
+      initialize_load
+      super
+    end
+
     def format
       @format || Format::Symbolize.new(format: Format::Auto.new)
     end
