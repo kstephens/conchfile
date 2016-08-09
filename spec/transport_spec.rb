@@ -10,17 +10,28 @@ module Conchfile
     let(:env) { { } }
 
     context "#call" do
-      context "for file" do
-        let(:opts) { {file: __FILE__} }
+      context "for file:/// URI" do
+        let(:opts) { {uri: "file://#{File.expand_path(__FILE__)}"} }
         it "reads from file" do
-          expect(subject.call(env)) .to eq(File.read(opts[:file]))
+          expect(subject.call(env)) .to eq(File.read(__FILE__))
         end
       end
-
-      context "for uri" do
-        let(:opts) { {uri: "file://#{File.expand_path(__FILE__)}"} }
-        it "reads from file:// uri" do
+      context "for file URI" do
+        let(:opts) { {uri: __FILE__} }
+        it "reads from file" do
           expect(subject.call(env)) .to eq(File.read(__FILE__))
+        end
+      end
+    end
+
+    context "#uri_" do
+      context "for file path" do
+        let(:opts) { {uri: "foo/bar"} }
+        let(:result) { subject.uri_(env) }
+        it "returns a valid file:// URI" do
+          expect(result.scheme) .to eq('file')
+          expect(result.host)   .to eq(nil)
+          expect(result.path)   .to eq('foo/bar')
         end
       end
     end
