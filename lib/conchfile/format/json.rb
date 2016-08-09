@@ -8,7 +8,13 @@ module Conchfile
 
       def call content, env
         content = content.gsub(%{^\s*//[^\n]*}, '') # ADHOC // comments.
-        ::JSON.parse(content)
+        ::MultiJson.load(content)
+      end
+
+      def inverse
+        lambda do | data, env |
+          ::MultiJson.dump(data, pretty: true)
+        end
       end
     end
   end

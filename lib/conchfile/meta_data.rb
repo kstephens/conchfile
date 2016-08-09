@@ -38,5 +38,12 @@ module Conchfile
     rescue
       data
     end
+
+    def self.without data
+      f = lambda do | x |
+        x.dup rescue nil or x
+      end
+      Deep.deep_visit(data, f)
+    end
   end
 end

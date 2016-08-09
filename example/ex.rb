@@ -12,11 +12,19 @@ require 'conchfile/format/yaml'
 require 'conchfile/format/json'
 require 'conchfile/source/static'
 require 'conchfile/source/arg_opts'
+require 'conchfile/source/writer'
 
 module Conchfile
   def self.run!
-    layer = Source::Layer.new(name: "layer")
-    root = Root.new(name: 'root', source: layer)
+    layer = Source::Layer
+      .new(name: "layer")
+
+    writer = Source::Writer
+      .new(name: "writer",
+           source: layer,
+           transport: Transport.new(uri: "#{File.dirname(__FILE__)}/saved.json"))
+
+    root = Root.new(name: 'root', source: writer)
 
     root << Source::Static.
       new(name: "env",

@@ -16,7 +16,7 @@ module Conchfile
       else
         data = OpenURI.open_uri(uri) do |f|
           meta_data.http_headers = h = f.meta
-          content_type = h['content-type']
+          content_type  = h['content-type']
           meta_data.mime_type = MIME::Types[content_type].first if content_type
           last_modified = h['last-modified']
           meta_data.mtime = Time.rfc2822(last_modified) if last_modified

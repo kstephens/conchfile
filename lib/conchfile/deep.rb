@@ -64,6 +64,10 @@ module Conchfile
         lambda{|k| k.respond_to?(:to_sym) ? k.to_sym : k })
     end
 
+    def deep_visit x, f
+      deep_walk(x, f, f)
+    end
+
     def deep_visit! x, f
       deep_walk!(x, f, f)
     end

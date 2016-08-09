@@ -10,6 +10,14 @@ module Conchfile
       def call content, env
         ::YAML.load(content)
       end
+
+      def inverse
+        lambda do | data, env |
+          data = WithMetaData.without(data)
+          binding.pry
+          ::YAML.dump(data)
+        end
+      end
     end
   end
 end
