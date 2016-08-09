@@ -1,7 +1,6 @@
 require 'conchfile/initialize'
 require 'conchfile/inspect'
-require 'mime-types'
-require 'time'
+require 'conchfile/deep'
 
 module Conchfile
   class MetaData
@@ -25,6 +24,13 @@ module Conchfile
 
     def inspect_ivars ; INSPECT_IVARS ; end
     INSPECT_IVARS = [ :uri, :uri_alt, :mime_type, :atime, :mtime ].freeze
+
+    def self.without data
+      f = lambda do | x |
+        x.dup rescue nil or x
+      end
+      Deep.deep_visit(data, f)
+    end
   end
 
   module WithMetaData
@@ -39,11 +45,5 @@ module Conchfile
       data
     end
 
-    def self.without data
-      f = lambda do | x |
-        x.dup rescue nil or x
-      end
-      Deep.deep_visit(data, f)
-    end
   end
 end

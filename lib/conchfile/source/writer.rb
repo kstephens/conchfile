@@ -20,7 +20,9 @@ module Conchfile
         format = format.new if format.respond_to?(:new)
 
         content = format.inverse.call(data, env)
-        logger.info { "#{self.class} : posting #{mime_type} #{content.size} bytes to #{uri}" }
+        WithMetaData[content].meta_data.mime_type ||= mime_type
+
+        logger.info { "#{self.class} : PUT #{uri} : #{mime_type} #{content.size} bytes" }
         transport.put(content, env)
         data
       end

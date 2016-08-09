@@ -22,7 +22,7 @@ module Conchfile
     writer = Source::Writer
       .new(name: "writer",
            source: layer,
-           transport: Transport.new(uri: "#{File.dirname(__FILE__)}/saved.json"))
+           transport: Transport.new(uri: "http://localhost:3333/tmp/writer.json"))
 
     root = Root.new(name: 'root', source: writer)
 
@@ -36,11 +36,12 @@ module Conchfile
     root << args
     root.load!
 
-    root << Root.new(source:
-                     Source.
-                     new(name: "default",
-                         transport: Transport.new(uri: "http://localhost:3333/default.json.erb"))
-                     )
+    root << Root.
+      new(source:
+          Source.
+          new(name: "default",
+              transport: Transport.new(uri: "http://localhost:3333/default.json.erb"))
+          )
     root << args
 
     cf = "example/#{root[:environment]}.yaml"

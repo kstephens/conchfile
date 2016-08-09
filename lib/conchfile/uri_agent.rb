@@ -67,7 +67,7 @@ module Conchfile
         request = req.new(uri)
         unless body.nil?
           request.body = body
-          if mime_type = body.meta_data.mime_type
+          if mime_type = MetaData[body].mime_type
             h['Content-Type'] = mime_type.to_s
           end
         end
