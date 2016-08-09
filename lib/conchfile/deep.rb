@@ -28,8 +28,7 @@ module Conchfile
         result = { }
         x.each do | k, v |
           k = kf[k] if kf
-          v = deep_walk(v, vf, kf)
-          result[k] = v
+          result[k] = deep_walk(v, vf, kf)
         end
         x = result
       when Enumerable
@@ -47,8 +46,7 @@ module Conchfile
         x.clear
         copy.each do | k, v |
           k = kf[k] if kf
-          v = deep_walk!(v, vf, kf)
-          x[k] = v
+          x[k] = deep_walk!(v, vf, kf)
         end
       when Enumerable
         x.map! do | v |
