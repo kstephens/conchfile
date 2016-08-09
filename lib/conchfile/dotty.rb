@@ -22,6 +22,10 @@ module Conchfile
       Dotty[@x[k]]
     end
 
+    def []= k, v
+      raise Error, "immutable"
+    end
+
     def method_missing sel, *args, &blk
       if @x.respond_to?(sel) or ! args.empty? or blk
         super
