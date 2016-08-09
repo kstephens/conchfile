@@ -9,7 +9,7 @@ require 'conchfile/uri_agent'
 module Conchfile
   class Transport
     include Initialize, Inspect, Logger
-    attr_accessor :uri, :mime_type, :uri_agent, :ignore_error
+    attr_accessor :name, :uri, :mime_type, :uri_agent, :ignore_error
 
     def call env
       raise Error, "no uri specified" unless uri
@@ -18,7 +18,7 @@ module Conchfile
         get uri, env
       rescue => exc
         if ignore_error
-          logger.warn { "#{self.class} : #{uri} : ignoring error : #{exc.inspect}" }
+          logger.warn { "#{self.class} #{name} : #{uri} : ignoring error : #{exc.inspect}" }
           nil
         else
           raise
@@ -55,7 +55,7 @@ module Conchfile
     end
 
     def inspect_ivars
-      [ :uri, :file ]
+      [ :name, :uri ]
     end
   end
 end

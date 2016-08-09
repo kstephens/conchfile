@@ -30,7 +30,7 @@ module Conchfile
       begin
         content = transport.call(env)
       rescue => exc
-        exc = Error.new("#{self.class} : in #{transport.inspect}: #{exc.inspect}")
+        exc = Error.new("#{self.class} #{name} : in #{transport.inspect}: #{exc.inspect}")
         logger.error exc
         raise exc, exc.message, $!.backtrace
       end
@@ -38,7 +38,7 @@ module Conchfile
       return nil if content.nil?
 
       WithMetaData[content]
-      logger.debug { "#{self.class} : Fetched content #{content.meta_data.inspect} from #{transport.inspect}" }
+      logger.debug { "#{self.class} #{name} : Fetched content #{content.meta_data.inspect} from #{transport.inspect}" }
 
       content.meta_data.source ||= self
 
@@ -56,7 +56,7 @@ module Conchfile
       begin
         data = format.call(content, env)
       rescue => exc
-        exc = Error.new("#{self.class} : in #{content.meta_data.uri}: #{exc.inspect}")
+        exc = Error.new("#{self.class} #{name} : in #{content.meta_data.uri}: #{exc.inspect}")
         logger.error exc
         raise exc, exc.message, $!.backtrace
       end
