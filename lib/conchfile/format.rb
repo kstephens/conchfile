@@ -1,10 +1,11 @@
 require 'conchfile/initialize'
+require 'conchfile/inspect'
 require 'conchfile/logger'
 
 module Conchfile
   class Format
     class Error < Conchfile::Error; end
-    include Initialize, Logger
+    include Initialize, Inspect, Logger
     attr_accessor :format
 
     def call data, env = nil
@@ -15,12 +16,8 @@ module Conchfile
       @format || Symbolize.new(format: Auto.new)
     end
 
-    def inspect
-      "#<#{self.class} #{inspect_inner}>"
-    end
-
-    def inspect_inner
-      @format && @format.inspect
+    def inspect_ivars
+      [ :format ]
     end
   end
 end

@@ -46,8 +46,8 @@ module Conchfile
         result
       end
 
-      def inspect_inner
-        @opts.inspect
+      def inspect_ivars
+        [ :opts ]
       end
     end
   end

@@ -1,10 +1,11 @@
 require 'conchfile/initialize'
+require 'conchfile/inspect'
 require 'mime-types'
 require 'time'
 
 module Conchfile
   class MetaData
-    include Initialize
+    include Initialize, Inspect
     attr_accessor :uri, :uri_alt, :line, :mime_type, :source, :arg, :atime, :mtime, :http_headers
 
     def content
@@ -17,16 +18,13 @@ module Conchfile
       x
     end
 
-    def inspect opt = nil
-      return super if opt == :super
-      [ "#<#{self.class}",
-        @uri,
-        @uri_alt,
-        @mtime && @mtime.iso8601(3),
-        @atime && @atime.iso8601(3),
-        mime_type,
-      ].compact.join(' ') << ">"
+    def self.[] obj
+      respond_to?(:meta_data) and obj.meta_data or Empty
     end
+    Empty = MetaData.new.freeze
+
+    def inspect_ivars ; INSPECT_IVARS ; end
+    INSPECT_IVARS = [ :uri, :uri_alt, :mime_type, :atime, :mtime ].freeze
   end
 
   module WithMetaData

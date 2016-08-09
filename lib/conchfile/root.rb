@@ -1,4 +1,8 @@
+require 'conchfile/initialize'
+require 'conchfile/inspect'
 require 'conchfile/lazy_load'
+require 'conchfile/meta_data'
+require 'conchfile/logger'
 require 'conchfile/deep'
 require 'thread'
 
@@ -6,7 +10,7 @@ module Conchfile
   class Root
     class Error < Conchfile::Error; end
 
-    include HashLike, Initialize, LazyLoad, WithMetaData, Logger
+    include HashLike, Initialize, Inspect, LazyLoad, WithMetaData, Logger
     attr_accessor :name, :source
 
     def initialize *args
@@ -91,12 +95,8 @@ module Conchfile
 
     ###########################
 
-    def inspect
-      "#<#{self.class} #{name.inspect} #{@load_state.inspect} #{inspect_inner}>"
-    end
-
-    def inspect_inner
-      nil
+    def inspect_ivars
+      [ :name, :load_state ]
     end
   end
 end

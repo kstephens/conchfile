@@ -1,6 +1,7 @@
 require 'conchfile/initialize'
-require 'conchfile/meta_data'
+require 'conchfile/inspect'
 require 'conchfile/logger'
+require 'conchfile/meta_data'
 
 require 'uri'
 require 'open-uri'
@@ -8,12 +9,8 @@ require 'mime-types'
 
 module Conchfile
   class Transport
-    include Initialize, Logger
+    include Initialize, Inspect, Logger
     attr_accessor :uri, :file, :ignore_error
-
-    def inspect
-      "#<#{self.class} #{(uri || file).inspect}>"
-    end
 
     def call env
       unless u = determine_uri(env)
@@ -59,6 +56,10 @@ module Conchfile
         end
       end
       WithMetaData[data, meta_data]
+    end
+
+    def inspect_ivars
+      [ :uri, :file ]
     end
   end
 end

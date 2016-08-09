@@ -19,6 +19,7 @@ class URI::Generic
 end
 
 require 'conchfile/error'
+require 'conchfile/inspect'
 require 'conchfile/logger'
 require 'conchfile/initialize'
 require 'conchfile/meta_data'

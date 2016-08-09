@@ -7,7 +7,7 @@ module Conchfile
   class Source
     class Error < Conchfile::Error; end
 
-    include Initialize, Logger
+    include Initialize, Inspect, Logger, LazyLoad
     attr_accessor :name, :transport, :format
 
     def format
@@ -65,12 +65,14 @@ module Conchfile
       data
     end
 
-    def inspect
-      "#<#{self.class} #{name.inspect} #{inspect_inner}>"
+    def _load!
     end
 
-    def inspect_inner
-      transport.inspect
+    def _unload!
+    end
+
+    def inspect_ivars
+      [ :name, :transport ]
     end
   end
 end
