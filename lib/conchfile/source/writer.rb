@@ -21,7 +21,7 @@ module Conchfile
 
         content = format.inverse.call(data, env)
         logger.info { "#{self.class} : posting #{mime_type} #{content.size} bytes to #{uri}" }
-        transport.post(content, env)
+        transport.put(content, env)
         data
       end
 

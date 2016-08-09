@@ -45,9 +45,9 @@ module Conchfile
       uri_agent.delete(uri)
     end
 
-    def post content, env
+    def put content, env
       uri = self.uri_(env)
-      uri_agent.post(content, uri)
+      uri_agent.put(content, uri)
     end
 
     def uri_agent
