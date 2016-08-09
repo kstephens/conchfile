@@ -49,6 +49,7 @@ module Conchfile
 
     dotty = Dotty[root.data]
 
+    ap(root.data)
     binding.pry
   end
 
