@@ -1,5 +1,5 @@
 require 'conchfile/format'
-require 'json'
+require 'multi_json'
 
 module Conchfile
   class Format
