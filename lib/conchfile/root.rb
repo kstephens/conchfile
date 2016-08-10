@@ -1,4 +1,5 @@
 require 'conchfile/initialize'
+require 'conchfile/hash_like'
 require 'conchfile/inspect'
 require 'conchfile/load_state'
 require 'conchfile/meta_data'
@@ -10,7 +11,7 @@ module Conchfile
   class Root
     class Error < Conchfile::Error; end
 
-    include HashLike, Initialize, Inspect, LoadState, WithMetaData, Logger
+    include HashLike::Proxy, Initialize, Inspect, LoadState, WithMetaData, Logger
     attr_accessor :name, :source
 
     def initialize *args
@@ -20,32 +21,9 @@ module Conchfile
     end
 
     ###########################
-    # Hash-like
-
-    def [] k
-      data[k]
-    end
-
-    def key? k
-      data.key?(k)
-    end
-
-    def keys
-      data.keys
-    end
-
-    def values
-      data.values
-    end
-
-    def each &blk
-      data.each &blk
-    end
-
-    ###########################
     # Data loading
-    #
 
+    # Lazily loads @data.
     def data
       check_load!
       raise Error, "data not available" unless @data
@@ -54,12 +32,6 @@ module Conchfile
 
     def data= x
       @data = x
-    end
-
-    def << layer
-      unload!
-      source << layer
-      self
     end
 
     def synchronize
@@ -78,12 +50,27 @@ module Conchfile
         data = source.call(env || @data || { })
         @data = data
       end
-      @data
+      self
     end
 
     def _unload!
       source.unload!
     end
+
+    ###########################
+    # Layer-like
+
+    # Appends a source to an underlying Source::Layer.
+    def << layer
+      unload!
+      source << layer
+      self
+    end
+
+    ###########################
+    # Hash-like
+
+    alias :_delegate_data :data
 
     ###########################
     # Source-like

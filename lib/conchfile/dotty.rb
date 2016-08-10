@@ -1,12 +1,13 @@
-require 'conchfile/error'
+require 'conchfile/hash_like'
 
 module Conchfile
+  # A proxy around a HashLike object
+  # exposing #[] access as proxy methods.
+  # Enforces limited read-only access.
   class Dotty
-    class Error < Conchfile::Error; end
-
     def self.[] x
       case x
-      when Hash, Enumerable
+      when HashLike, Enumerable
         new(x)
       else
         x

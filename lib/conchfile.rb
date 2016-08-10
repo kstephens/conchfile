@@ -1,10 +1,5 @@
 require "conchfile/version"
-
-module Conchfile
-  module HashLike
-    ::Hash.send(:include, self)
-  end
-end
+require 'conchfile/hash_like'
 
 require 'uri'
 class URI::Generic

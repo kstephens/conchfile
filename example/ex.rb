@@ -13,6 +13,7 @@ require 'conchfile/format/json'
 require 'conchfile/source/static'
 require 'conchfile/source/arg_opts'
 require 'conchfile/source/writer'
+require 'conchfile/policy/ttl'
 
 module Conchfile
   def self.run!
@@ -55,6 +56,8 @@ module Conchfile
         new(name: "config_uri",
             transport: Transport.new(uri: cf))
     end
+
+    root = Policy::Ttl.new(name: "ttl", source: root, ttl: 5)
 
     dotty = Dotty[root.data]
 
