@@ -24,6 +24,10 @@ module Conchfile
       def each &blk
         _delegate_data.each &blk
       end
+
+      def to_hash
+        _delegate_data.to_hash
+      end
     end
   end
 end
