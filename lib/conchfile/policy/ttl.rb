@@ -6,15 +6,15 @@ module Conchfile
       attr_accessor :now, :ttl, :atime, :expires
 
       def valid_policy?
-        now = self.now
-        atime && expires && now < expires
+        t = now
+        atime && expires && t < expires
       end
 
       def with_policy
         result = yield
-        now = self.now
-        self.atime = now
-        self.expires = now + ttl
+        t = now
+        self.atime = t
+        self.expires = t + ttl
         result
       end
 
