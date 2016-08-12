@@ -35,6 +35,14 @@ module Conchfile
       @x.to_a
     end
 
+    def hash
+      @x.hash
+    end
+
+    def == other
+      @x == other
+    end
+
     def method_missing sel, *args, &blk
       if @x.respond_to?(sel) or ! args.empty? or blk
         super
