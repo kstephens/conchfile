@@ -1,3 +1,6 @@
+require 'time'
+require 'date'
+
 module Conchfile
   module Inspect
     def inspect opt = nil
@@ -8,7 +11,16 @@ module Conchfile
         inspect_ivars
           .map    {|a| [ a, instance_variable_get("@#{a}") ] }
           .select {|x| ! x[1].nil? }
-          .each   {|x| x[1] = x[1].inspect }
+          .each   do |x|
+          x[1] = case y = x[1]
+                 when ::Time
+                   y.iso8601(3)
+                 when ::Date
+                   y.to_s
+                 else
+                   y.inspect
+                 end
+        end
         ) .join(' ') << ">"
     end
 

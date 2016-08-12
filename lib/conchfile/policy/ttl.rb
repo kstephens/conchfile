@@ -23,7 +23,7 @@ module Conchfile
       end
 
       def inspect_ivars
-        [ :name, :load_state, :ttl ]
+        [ :name, :load_state, :ttl, :expires ]
       end
     end
   end
