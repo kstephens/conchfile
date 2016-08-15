@@ -1,18 +1,6 @@
 require "conchfile/version"
 require 'conchfile/hash_like'
-
-require 'uri'
-class URI::Generic
-  def suffix
-    path && path.to_s =~ /\.([^.]+)$/ && $1
-  end
-  def without_suffix
-    uri = self.dup
-    uri.path &&= uri.path.sub(%r{\.[^.]+$}, '')
-    uri
-  end
-end
-
+require 'conchfile/uri'
 require 'conchfile/error'
 require 'conchfile/inspect'
 require 'conchfile/logger'

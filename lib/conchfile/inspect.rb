@@ -1,5 +1,6 @@
 require 'time'
 require 'date'
+require 'uri'
 
 module Conchfile
   module Inspect
@@ -17,6 +18,8 @@ module Conchfile
                    y.iso8601(3)
                  when ::Date
                    y.to_s
+                 when ::URI
+                   (y.without_user_pass.to_s rescue nil) or y.to_s
                  else
                    y.inspect
                  end

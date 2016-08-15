@@ -1,5 +1,5 @@
 require 'net/http'
-require 'uri'
+require 'conchfile/uri'
 
 module Conchfile
   class UriAgent
@@ -71,11 +71,9 @@ module Conchfile
 
         if uri.user || uri.password
           request.basic_auth uri.user, uri.password
-          uri = uri.dup
-          uri.user &&= 'U'
-          uri.password &&= 'P'
+          uri = uri.without_user_pass
         end
-        
+
         unless body.nil?
           request.body = body
           if mime_type = MetaData[body].mime_type
