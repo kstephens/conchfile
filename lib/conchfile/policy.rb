@@ -34,8 +34,8 @@ module Conchfile
       load!
     end
 
-    def _load!
-      source.load!
+    def _load! *args
+      source.load! *args
       super
     end
 
