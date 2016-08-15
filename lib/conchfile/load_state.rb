@@ -68,6 +68,10 @@ module Conchfile
       self
     end
 
+    def reload!
+      unload!
+      load!
+    end
   end
 end
 
