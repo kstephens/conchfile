@@ -31,7 +31,7 @@ module Conchfile
       end
 
       def erb_header? content
-        content =~ /-\*-\s+erb\s+-\*-/
+        content =~ /-\*-.*\s+erb\s+.*-\*-/
       end
 
       def expand_erb content, env
