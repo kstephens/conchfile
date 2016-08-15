@@ -15,8 +15,8 @@ module Conchfile
         content = File.read(uri.path)
         meta_data.mtime = File.mtime(uri.path)
       else
-        http(uri, Net::HTTP::Get, nil, headers) do | res |
-          check_status! :GET, res
+        http(uri, Net::HTTP::Get, nil, headers) do | uri, res |
+          check_status! :GET, uri, res
           content = res.body
           set_meta_data! meta_data, res
         end
@@ -42,8 +42,8 @@ module Conchfile
       when nil, "file"
         File.unlink(uri.path)
       else
-        http(uri, Net::HTTP::Delete, nil, headers) do | res |
-          check_status! :DELETE, res
+        http(uri, Net::HTTP::Delete, nil, headers) do | uri, res |
+          check_status! :DELETE, uri, res
         end
       end
     end
@@ -53,8 +53,8 @@ module Conchfile
       when nil, "file"
         File.write(uri.path, content)
       else
-        http(uri, Net::HTTP::Put, content, headers) do | res |
-          check_status! :PUT, res
+        http(uri, Net::HTTP::Put, content, headers) do | uri, res |
+          check_status! :PUT, uri, res
         end
       end
     end
@@ -63,23 +63,37 @@ module Conchfile
       Net::HTTP.start(uri.host, uri.port,
                       use_ssl: uri.scheme == 'https'
                       ) do | http |
-        h = (@headers || Empty_Hash).merge(headers || Empty_Hash)
+        h =
+          (@headers || Empty_Hash).
+          merge(headers || Empty_Hash)
+
         request = req.new(uri)
+
+        if uri.user || uri.password
+          request.basic_auth uri.user, uri.password
+          uri = uri.dup
+          uri.user &&= 'U'
+          uri.password &&= 'P'
+        end
+        
         unless body.nil?
           request.body = body
           if mime_type = MetaData[body].mime_type
             h['Content-Type'] = mime_type.to_s
           end
         end
+
         h.each do | k, v |
           request[k] = v
         end
+
         response = http.request(request)
-        yield response
+
+        yield uri, response
       end
     end
 
-    def check_status! method, res
+    def check_status! method, uri, res
       unless res.code.to_i == 200
         msg = "#{method} #{uri} status #{res.code}"
         logger.error "#{self.class} : #{msg}"
