@@ -4,7 +4,7 @@ module Conchfile
   module Logger
     def self.logger
       Thread.current[:'Conchfile::Logger.logger'] or
-        @@logger ||= ::Logger.new($stderr)
+        @@logger ||= NullLogger.new
     end
     def self.logger= x
       @@logger = x
@@ -23,6 +23,12 @@ module Conchfile
         yield
       ensure
         Thread.current[:'Conchfile::Logger.logger'] = save
+      end
+    end
+
+    class NullLogger
+      def method_missing sel, *args
+        nil
       end
     end
   end
