@@ -11,6 +11,10 @@ module Conchfile
     include Initialize, Inspect, Logger
     attr_accessor :name, :uri, :mime_type, :uri_agent, :ignore_error
 
+    def uri= x
+      @uri = x && (URI === x ? x : URI.parse(x))
+    end
+
     def call env
       raise Error, "no uri specified" unless uri
       uri = uri_(env)
@@ -31,8 +35,8 @@ module Conchfile
       unless URI === uri
         # TODO: interpolate based on env?
         uri = URI.parse(uri)
-        uri.scheme ||= 'file'
       end
+      uri.scheme ||= 'file'
       uri
     end
 
