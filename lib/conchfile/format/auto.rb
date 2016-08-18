@@ -10,7 +10,7 @@ module Conchfile
       def call content, env
         meta_data = content.meta_data
         format, mt = mime_types.format_for_meta_data(meta_data)
-        logger.debug { "Determined Format #{format} #{mt} for #{meta_data.inspect}" } if format
+        logger.info { "Determined Format #{format} #{mt} for #{meta_data.inspect}" } if format
 
         format ||= @default
         raise Error, "Cannot determine Format for #{meta_data.inspect}" unless format

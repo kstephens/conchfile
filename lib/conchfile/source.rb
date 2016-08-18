@@ -38,7 +38,7 @@ module Conchfile
       return nil if content.nil?
 
       WithMetaData[content]
-      logger.debug { "#{self.class} #{name} : Fetched content #{content.meta_data.inspect} from #{transport.inspect}" }
+      logger.info { "#{self.class} #{name} : Fetched content #{content.meta_data.inspect} from #{transport.inspect}" }
 
       content.meta_data.source ||= self
 
