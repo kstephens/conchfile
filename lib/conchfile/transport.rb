@@ -13,11 +13,11 @@ module Conchfile
 
     def uri= x
       @uri = x && (URI === x ? x : URI.parse(x))
+      @uri.scheme ||= 'file' if @uri
     end
 
     def call env
       raise Error, "no uri specified" unless uri
-      uri = uri_(env)
       begin
         get uri, env
       rescue => exc
@@ -30,27 +30,15 @@ module Conchfile
       end
     end
 
-    def uri_(env)
-      uri = @uri
-      unless URI === uri
-        # TODO: interpolate based on env?
-        uri = URI.parse(uri)
-      end
-      uri.scheme ||= 'file'
-      uri
-    end
-
     def get uri, env
       uri_agent.get(uri)
     end
 
     def delete env
-      uri = self.uri_(env)
       uri_agent.delete(uri)
     end
 
     def put content, env
-      uri = self.uri_(env)
       uri_agent.put(content, uri)
     end
 

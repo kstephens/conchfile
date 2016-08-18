@@ -37,17 +37,5 @@ module Conchfile
         end
       end
     end
-
-    context "#uri_" do
-      context "for file path" do
-        let(:opts) { {uri: "foo/bar"} }
-        let(:result) { subject.uri_(env) }
-        it "returns a valid file:// URI" do
-          expect(result.scheme) .to eq('file')
-          expect(result.host)   .to eq(nil)
-          expect(result.path)   .to eq('foo/bar')
-        end
-      end
-    end
   end
 end
