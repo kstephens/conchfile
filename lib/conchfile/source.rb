@@ -73,7 +73,7 @@ module Conchfile
     def _load! env
     end
 
-    def _unload!
+    def _unload! opts
     end
 
     def inspect_ivars

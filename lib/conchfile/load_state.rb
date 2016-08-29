@@ -2,6 +2,7 @@ require 'thread'
 
 module Conchfile
   module LoadState
+    Empty_Hash = { }.freeze
     attr_accessor :load_state, :should_unload
 
     def initialize_load
@@ -52,15 +53,16 @@ module Conchfile
     end
     alias :should_unload? :should_unload
 
-    def unload!
+    def unload! opts = nil
+      opts ||= Empty_Hash
       @load_state_mutex.synchronize do
         logger.debug { "#{self.class} unload! #{@load_state.inspect}" }
         case @load_state
         when :loaded
           if block_given?
-            yield
+            yield opts
           else
-            _unload!
+            _unload! opts
           end
           @load_state = :unloaded
         end
@@ -68,8 +70,8 @@ module Conchfile
       self
     end
 
-    def reload!
-      unload!
+    def reload! opts = Empty_Hash
+      unload! opts
       load!
     end
   end

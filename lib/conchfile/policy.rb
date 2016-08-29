@@ -30,7 +30,7 @@ module Conchfile
     end
 
     def _execute_policy!
-      unload!
+      unload!(deep: true)
       load!
     end
 
@@ -39,8 +39,8 @@ module Conchfile
       super
     end
 
-    def _unload!
-      source.unload!
+    def _unload! opts
+      source.unload! opts
       super
     end
 

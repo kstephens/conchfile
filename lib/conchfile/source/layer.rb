@@ -45,8 +45,8 @@ module Conchfile
         layers.each {|s| s.load!(env) }
       end
 
-      def _unload!
-        layers.each(&:unload!)
+      def _unload! opts
+        layers.each{|s| s.unload!(opts)} if opts[:deep]
       end
 
       def inspect_ivars

@@ -53,8 +53,8 @@ module Conchfile
       self
     end
 
-    def _unload!
-      source.unload!
+    def _unload! opts
+      source.unload! opts
     end
 
     ###########################
