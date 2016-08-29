@@ -45,7 +45,7 @@ module Conchfile
       self
     end
 
-    def _load! env = nil
+    def _load! env
       synchronize do
         data = source.call(env || @data || { })
         @data = data
@@ -76,7 +76,7 @@ module Conchfile
     # Source-like
 
     def call env
-      check_load!(env)
+      check_load! env
       data
     end
 

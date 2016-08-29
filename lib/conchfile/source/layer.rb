@@ -41,8 +41,8 @@ module Conchfile
         result
       end
 
-      def _load!
-        layers.each(&:load!)
+      def _load! env
+        layers.each {|s| s.load!(env) }
       end
 
       def _unload!

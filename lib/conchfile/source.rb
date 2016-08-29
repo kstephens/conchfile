@@ -70,7 +70,7 @@ module Conchfile
       data
     end
 
-    def _load!
+    def _load! env
     end
 
     def _unload!

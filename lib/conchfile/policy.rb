@@ -34,8 +34,8 @@ module Conchfile
       load!
     end
 
-    def _load! *args
-      source.load! *args
+    def _load! env
+      source.load! env
       super
     end
 
@@ -48,7 +48,7 @@ module Conchfile
       yield
     end
 
-    def _load! *args
+    def _load! env
       with_policy do
         logger.info { "#{self.class} : Policy #{self.inspect} _load!" }
         super

@@ -8,7 +8,7 @@ module Conchfile
       @load_state_mutex = Mutex.new
     end
 
-    def load! *args
+    def load! env = nil
       @load_state_mutex.synchronize do
         logger.debug { "#{self.class} load! #{@load_state.inspect}" }
         case @load_state
@@ -17,9 +17,9 @@ module Conchfile
           @load_state = :loading
           begin
             if block_given?
-              yield *args
+              yield env
             else
-              send(:_load!, *args)
+              _load! env
             end
             @load_state = :loaded
             @should_unload = false
