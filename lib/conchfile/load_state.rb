@@ -11,7 +11,7 @@ module Conchfile
 
     def load! env = nil
       @load_state_mutex.synchronize do
-        logger.debug { "#{self.class} load! #{@load_state.inspect}" }
+        logger.debug { "#{self.class} load! #{@name.inspect} #{@load_state.inspect}" }
         case @load_state
         when :loading, :loaded
         when :invalid, :unloaded, :failed, nil
@@ -56,7 +56,7 @@ module Conchfile
     def unload! opts = nil
       opts ||= Empty_Hash
       @load_state_mutex.synchronize do
-        logger.debug { "#{self.class} unload! #{@load_state.inspect}" }
+        logger.debug { "#{self.class} unload! #{@name.inspect} #{@load_state.inspect}" }
         case @load_state
         when :loaded
           if block_given?
