@@ -35,6 +35,8 @@ module Conchfile
       end
 
       def expand_erb content, env
+        raise Error "env is nil" unless env
+
         meta_data = content.meta_data
 
         erb = ERB.new(content, nil, '-')
