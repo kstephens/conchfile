@@ -36,6 +36,30 @@ module Conchfile
             .to eq(nil)
         end
       end
+
+      context "with timeout" do
+        let(:uri) { __FILE__ }
+        let(:opts) { { uri: uri, timeout: 0.02, logger: logger } }
+        let(:mock) do
+          def subject._get *args
+            sleep 1
+          end
+          subject
+        end
+        it "raises error and logs ERROR" do
+          expect do
+            mock.call(env)
+          end .to raise_error(Conchfile::Error::Timeout)
+          expect(logger_output) .to match(%r{ERROR .* Conchfile::Transport .* timeout .* #<Conchfile::Error::Timeout})
+        end
+        context "with :ignore_error" do
+          let(:opts) { { uri: uri, timeout: 0.02, logger: logger, ignore_error: true } }
+          it "returns nil and logs ERROR" do
+            expect(mock.call(env)) .to be_nil
+            expect(logger_output) .to match(%r{ERROR .* Conchfile::Transport .* timeout .* #<Conchfile::Error::Timeout})
+          end
+        end
+      end
     end
   end
 end
