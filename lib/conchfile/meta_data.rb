@@ -24,6 +24,19 @@ module Conchfile
 
     def inspect_ivars ; INSPECT_IVARS ; end
     INSPECT_IVARS = [ :uri, :uri_alt, :mime_type, :atime, :mtime ].freeze
+
+    # Do not accidentally Marshal.dump :source,
+    # since it contains state that:
+    #
+    # 1) cannot be serialized (e.g. Mutex)
+    # 2) might leak unintended, sensitive data.
+    #
+    def marshal_dump
+      nil
+    end
+    def marshal_load data
+      self
+    end
   end
 
   module WithMetaData

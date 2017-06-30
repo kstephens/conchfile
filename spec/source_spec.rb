@@ -27,11 +27,15 @@ END
     end
 
     context "#call" do
+      let(:result) { subject.call(env) }
       it "reads from file:// uri" do
-        expect(subject.call(env))
+        expect(result)
           .to eq({a: 1,
                   b: 2,
                   c: ['d', 'e', 'f']})
+      end
+      it "returns values with MetaData" do
+        expect(result[:c].meta_data.source) .to equal subject
       end
     end
   end
